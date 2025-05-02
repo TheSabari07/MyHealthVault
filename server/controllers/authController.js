@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 
-export const signupUser = async (req, res) => {
+const signupUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
@@ -24,7 +24,7 @@ export const signupUser = async (req, res) => {
   }
 };
 
-export const loginUser = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -39,3 +39,5 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export default { signupUser, loginUser };

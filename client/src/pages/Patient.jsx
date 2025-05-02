@@ -35,7 +35,6 @@ function PatientDashboard() {
           {records.length > 0 ? (
             records.map((record) => (
               <RecordCard key={record._id} record={record} />
-
             ))
           ) : (
             <p>No records available.</p>

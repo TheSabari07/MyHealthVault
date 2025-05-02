@@ -14,12 +14,11 @@ const upload = multer({ storage });
 
 //  (replace with real auth)
 const mockAuth = (req, res, next) => {
-  req.user = { id: "662f6abc1234567890fedcba" };
-  next();
+  // Extract and verify JWT, then set req.user
 };
 
 
-router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req, res) => {
+router.post("/upload-multiple",  upload.array("files", 10), async (req, res) => {
   try {
     const { title, description } = req.body;
     const files = req.files;
@@ -49,7 +48,7 @@ router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req,
 });
 
 
-router.get("/patient", mockAuth, async (req, res) => {
+router.get("/patient",  async (req, res) => {
   try {
     const patientId = req.user.id;
     const records = await Record.find({ patientId });

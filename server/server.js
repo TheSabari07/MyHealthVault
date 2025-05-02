@@ -22,9 +22,7 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
-
 app.use("/uploads", express.static(uploadsDir));
-
 
 connectDB();
 
@@ -33,3 +31,4 @@ app.use("/api/records", recordRoutes);
 
 const PORT = process.env.PORT || 5004;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
