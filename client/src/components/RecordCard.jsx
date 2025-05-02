@@ -11,3 +11,5 @@ function RecordCard({ record }) {
     </div>
   );
 }
+
+export default RecordCard;
