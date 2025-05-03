@@ -32,15 +32,28 @@ function UploadRecordForm() {
         withCredentials: true, 
       });
 
+      console.log('Response:', response.data); // Log response data
+
       if (response.data.success) {
         setMessage("Files uploaded successfully.");
         setFileURLs(response.data.records.map((rec) => `http://localhost:5004/${rec.filePath}`));
+        fetchFiles(); // Re-fetch the records after upload
       } else {
         setMessage("Upload failed.");
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error:', error);  // Log error
       setMessage("Upload error.");
+    }
+  };
+
+  // Fetch files after upload to show them immediately
+  const fetchFiles = async () => {
+    try {
+      const response = await axios.get("http://localhost:5004/api/records/patient");
+      setFileURLs(response.data.records.map((rec) => `http://localhost:5004/${rec.filePath}`));
+    } catch (error) {
+      console.error("Error fetching files:", error);
     }
   };
 

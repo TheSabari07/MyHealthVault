@@ -5,7 +5,6 @@ import Record from "../models/Record.js";
 
 const router = express.Router();
 
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
   filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`),
@@ -18,9 +17,11 @@ const mockAuth = (req, res, next) => {
   next();
 };
 
-
 router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req, res) => {
   try {
+    console.log("Authenticated user:", req.user);
+
+    
     const { title, description } = req.body;
     const files = req.files;
     const patientId = req.user.id;
@@ -35,11 +36,14 @@ router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req,
           patientId,
           title,
           description,
-          filePath: file.path,
+          filePath: `uploads/${file.filename}`, // Ensure this path is correct
         });
+
         return newRecord.save();
       })
     );
+
+    console.log('Records:', records); // Log the records to ensure they are saved correctly
 
     res.json({ success: true, records });
   } catch (err) {
@@ -47,7 +51,6 @@ router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req,
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
 
 router.get("/patient", mockAuth, async (req, res) => {
   try {
