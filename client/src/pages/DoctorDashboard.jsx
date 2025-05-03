@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import RecordCard from "../components/RecordCard.jsx";
 import RequestAccessForm from "../components/RequestAccessForm.jsx";
 import "../style/DoctorDashboard.css";

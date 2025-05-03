@@ -1,3 +1,6 @@
+import React from 'react';
+
+
 function RecordCard({ record }) {
   return (
     <div className="record-card">
