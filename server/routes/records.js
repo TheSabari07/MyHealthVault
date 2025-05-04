@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import Record from "../models/Record.js";
+import Permission from "../models/Permission.js";
 
 const router = express.Router();
 
@@ -13,10 +14,11 @@ const upload = multer({ storage });
 
 // Temporary mock authentication
 const mockAuth = (req, res, next) => {
-  req.user = { id: "6634d03fb94c1c72f46fb1b0" }; // replace with real auth later
+  req.user = { id: "6635eae898ddab4c48d6baf1" }; // doctor ID for testing
   next();
 };
 
+// Upload route
 router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -45,10 +47,27 @@ router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req,
   }
 });
 
+// Patient dashboard: show own records
 router.get("/patient", mockAuth, async (req, res) => {
   try {
     const patientId = req.user.id;
     const records = await Record.find({ patientId });
+    res.json({ success: true, records });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Doctor dashboard: show only records with permission
+router.get("/doctor", mockAuth, async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+
+    const permissions = await Permission.find({ userId: doctorId, accessGranted: true });
+    const recordIds = permissions.map((p) => p.recordId);
+    const records = await Record.find({ _id: { $in: recordIds } });
+
     res.json({ success: true, records });
   } catch (err) {
     console.error(err);

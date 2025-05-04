@@ -1,6 +1,6 @@
-import { useState } from "react";
-import "../style/RequestAccessForm.css"; 
+import React, { useState } from "react";
 import axios from "axios";
+import "../style/RequestAccessForm.css";
 
 function RequestAccessForm() {
   const [patientId, setPatientId] = useState("");
@@ -11,7 +11,7 @@ function RequestAccessForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/records/request-access", {
+      const response = await axios.post("http://localhost:5004/api/records/request-access", {
         patientId,
       });
 
