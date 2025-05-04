@@ -11,39 +11,32 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Mock authentication for development 
+// Temporary mock authentication
 const mockAuth = (req, res, next) => {
-  req.user = { id: "6634d03fb94c1c72f46fb1b0" }; // Will be replaced with actual MongoDB user _id
+  req.user = { id: "6634d03fb94c1c72f46fb1b0" }; // replace with real auth later
   next();
 };
 
 router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req, res) => {
   try {
-    console.log("Authenticated user:", req.user);
-
-    
     const { title, description } = req.body;
-    const files = req.files;
     const patientId = req.user.id;
 
-    if (!files || files.length === 0) {
+    if (!req.files || req.files.length === 0) {
       return res.status(400).json({ success: false, message: "No files uploaded" });
     }
 
     const records = await Promise.all(
-      files.map((file) => {
+      req.files.map((file) => {
         const newRecord = new Record({
           patientId,
           title,
           description,
-          filePath: `uploads/${file.filename}`, // Ensure this path is correct
+          filePath: `uploads/${file.filename}`,
         });
-
         return newRecord.save();
       })
     );
-
-    console.log('Records:', records); // Log the records to ensure they are saved correctly
 
     res.json({ success: true, records });
   } catch (err) {
