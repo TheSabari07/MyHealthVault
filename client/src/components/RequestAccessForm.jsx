@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../style/RequestAccessForm.css"; // Add your CSS file here
+import "../style/RequestAccessForm.css"; 
 import axios from "axios";
 
 function RequestAccessForm() {
@@ -28,7 +28,7 @@ function RequestAccessForm() {
   };
 
   return (
-    <div>
+    <div className="request-access-form">
       <form onSubmit={handleSubmit}>
         <label>
           Patient ID:
