@@ -6,6 +6,7 @@ import Signup from './pages/Signup.jsx'
 import PatientDashboard from './pages/Patient.jsx';
 import DoctorDashboard from './pages/DoctorDashboard.jsx';
 import NotFound from './pages/NotFound.jsx';
+import ManagePermissions from "./pages/ManagePermissions";
 
 function App() {
      
@@ -17,6 +18,7 @@ function App() {
        <Route path="/signup" element={<Signup />} />
        <Route path="/dashboard" element={<PatientDashboard />} />
        <Route path ="/doctor-dashboard" element={<DoctorDashboard />} />
+       <Route path="/manage-permissions" element={<ManagePermissions />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

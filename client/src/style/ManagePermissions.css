@@ -1,0 +1,145 @@
+.record-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .record-card h3 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .record-card p {
+    margin: 0.3rem 0;
+    color: #555;
+  }
+  
+  .record-card button {
+    margin-right: 0.5rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    border: none;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .record-card button:hover {
+    background-color: #1e7e34;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .record-card button {
+      display: block;
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #333;
+  }
+  
+  .dashboard-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    padding-top: 60px; 
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+  
+  .dashboard {
+    width: 100%;
+    max-width: 1000px;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.8); /* Glass effect */
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(6px);
+    overflow-y: auto;
+  }
+  
+  .dashboard h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    color: #222;
+    text-align: center;
+  }
+  
+  .dashboard button {
+    display: block;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    margin: 0 auto 2rem auto;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+  }
+  
+  .dashboard button:hover {
+    background-color: #0056b3;
+  }
+  
+  .records {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+    margin-top: 1rem;
+  }
+  
+  .records h2 {
+    font-size: 1.6rem;
+    color: #444;
+    text-align: center;
+    grid-column: 1 / -1;
+  }
+  
+  .records p {
+    font-style: italic;
+    color: #777;
+    text-align: center;
+  }
+  
+  .dashboard::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .dashboard::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .dashboard::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .dashboard {
+      padding: 1.5rem;
+    }
+  
+    .dashboard h1 {
+      font-size: 1.8rem;
+    }
+  
+    .records h2 {
+      font-size: 1.4rem;
+    }
+  }
+  

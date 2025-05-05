@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function RecordCard({ record, onGrantAccess, onRevokeAccess }) {
-  const [showPermissions, setShowPermissions] = useState(false);
+function RecordCard({ record }) {
+  const navigate = useNavigate();
 
   return (
     <div className="record-card">
@@ -13,16 +14,9 @@ function RecordCard({ record, onGrantAccess, onRevokeAccess }) {
         <button>View Record</button>
       </a>
 
-      <button onClick={() => setShowPermissions(!showPermissions)}>
-        {showPermissions ? 'Hide Permissions' : 'Manage Permissions'}
+      <button onClick={() => navigate("/manage-permissions")}>
+        Manage Permissions
       </button>
-
-      {showPermissions && (
-        <div className="permission-buttons">
-          <button onClick={() => onGrantAccess(record._id)}>Grant Access</button>
-          <button onClick={() => onRevokeAccess(record._id)}>Revoke Access</button>
-        </div>
-      )}
     </div>
   );
 }

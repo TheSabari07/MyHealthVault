@@ -3,6 +3,7 @@ import multer from "multer";
 import path from "path";
 import Record from "../models/Record.js";
 import Permission from "../models/Permission.js";
+import AccessRequest from "../models/AccessRequest.js";
 
 const router = express.Router();
 
@@ -59,7 +60,6 @@ router.get("/patient", mockAuth, async (req, res) => {
   }
 });
 
-// Doctor dashboard: show only records with permission
 router.get("/doctor", mockAuth, async (req, res) => {
   try {
     const doctorId = req.user.id;
@@ -69,6 +69,37 @@ router.get("/doctor", mockAuth, async (req, res) => {
     const records = await Record.find({ _id: { $in: recordIds } });
 
     res.json({ success: true, records });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+router.post("/request-access", mockAuth, async (req, res) => {
+  try {
+    const doctorId = req.user.id;
+    const { patientId } = req.body;
+
+    const existing = await AccessRequest.findOne({ doctorId, patientId, status: 'pending' });
+    if (existing) {
+      return res.status(400).json({ success: false, message: "Request already pending." });
+    }
+
+    const request = new AccessRequest({ doctorId, patientId });
+    await request.save();
+
+    res.json({ success: true, message: "Request sent successfully." });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+router.get("/requests", mockAuth, async (req, res) => {
+  try {
+    const patientId = req.user.id;
+    const requests = await AccessRequest.find({ patientId, status: 'pending' }).populate('doctorId', 'name email');
+    res.json({ success: true, requests });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error" });

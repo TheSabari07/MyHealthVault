@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import RecordCard from "../components/RecordCard.jsx";
-import RequestAccessForm from "../components/RequestAccessForm.jsx"; // Import the form
+import RequestAccessForm from "../components/RequestAccessForm.jsx";
 import "../style/DoctorDashboard.css";
 
 function DoctorDashboard() {
@@ -11,43 +11,15 @@ function DoctorDashboard() {
   const fetchRecords = async () => {
     try {
       const response = await axios.get("http://localhost:5004/api/records/doctor");
-      setRecords(response.data.records);
+      setRecords(response.data.records); // Only records the doctor has access to
     } catch (error) {
       console.error("Error fetching records:", error);
     }
   };
-  
 
   useEffect(() => {
     fetchRecords();
   }, []);
-
-  const handleGrantAccess = async (recordId) => {
-    try {
-      const userId = "6635eae898ddab4c48d6baf1"; // replace with real userId
-      await axios.post("http://localhost:5004/api/permissions/grant-permission", {
-        recordId,
-        userId,
-        role: "doctor",
-      });
-      fetchRecords();
-    } catch (error) {
-      console.error("Error granting access:", error);
-    }
-  };
-
-  const handleRevokeAccess = async (recordId) => {
-    try {
-      const userId = "6635eae898ddab4c48d6baf1"; // replace with real userId
-      await axios.post("http://localhost:5004/api/permissions/revoke-permission", {
-        recordId,
-        userId,
-      });
-      fetchRecords();
-    } catch (error) {
-      console.error("Error revoking access:", error);
-    }
-  };
 
   return (
     <div className="dashboard-wrapper">
@@ -58,21 +30,23 @@ function DoctorDashboard() {
           {isRequesting ? "Cancel Request" : "Request Access to Patient Records"}
         </button>
 
-        {isRequesting && <RequestAccessForm />}
+        {isRequesting && (
+          <RequestAccessForm
+            onRequestSuccess={() => {
+              setIsRequesting(false);
+              alert("Access request sent to patient.");
+            }}
+          />
+        )}
 
         <div className="records">
-          <h2>Records</h2>
+          <h2>Accessible Records</h2>
           {records.length > 0 ? (
             records.map((record) => (
-              <RecordCard
-                key={record._id}
-                record={record}
-                onGrantAccess={handleGrantAccess}
-                onRevokeAccess={handleRevokeAccess}
-              />
+              <RecordCard key={record._id} record={record} />
             ))
           ) : (
-            <p>No records available.</p>
+            <p>No accessible records yet.</p>
           )}
         </div>
       </div>
