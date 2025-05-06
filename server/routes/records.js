@@ -13,13 +13,12 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Temporary mock authentication
+
 const mockAuth = (req, res, next) => {
-  req.user = { id: "6635eae898ddab4c48d6baf1" }; // doctor ID for testing
-  next();
+  req.user = { id: "6635eae898ddab4c48d6baf1" }; 
 };
 
-// Upload route
+
 router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -48,7 +47,7 @@ router.post("/upload-multiple", mockAuth, upload.array("files", 10), async (req,
   }
 });
 
-// Patient dashboard: show own records
+
 router.get("/patient", mockAuth, async (req, res) => {
   try {
     const patientId = req.user.id;
@@ -75,35 +74,6 @@ router.get("/doctor", mockAuth, async (req, res) => {
   }
 });
 
-router.post("/request-access", mockAuth, async (req, res) => {
-  try {
-    const doctorId = req.user.id;
-    const { patientId } = req.body;
 
-    const existing = await AccessRequest.findOne({ doctorId, patientId, status: 'pending' });
-    if (existing) {
-      return res.status(400).json({ success: false, message: "Request already pending." });
-    }
-
-    const request = new AccessRequest({ doctorId, patientId });
-    await request.save();
-
-    res.json({ success: true, message: "Request sent successfully." });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
-router.get("/requests", mockAuth, async (req, res) => {
-  try {
-    const patientId = req.user.id;
-    const requests = await AccessRequest.find({ patientId, status: 'pending' }).populate('doctorId', 'name email');
-    res.json({ success: true, requests });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
 
 export default router;

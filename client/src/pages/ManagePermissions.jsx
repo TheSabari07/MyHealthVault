@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../style/ManagePermissions.css"; // Import the CSS file
+import "../style/ManagePermissions.css";
 
 function ManagePermissions() {
   const [requests, setRequests] = useState([]);
 
   const fetchRequests = async () => {
     try {
-      const res = await axios.get("http://localhost:5004/api/permissions/requests");
+      const res = await axios.get("http://localhost:5004/api/permissions/requests", {
+        headers: { "x-user-id": "6635eae898ddab4c48d6baf1" }  
+      });
       setRequests(res.data.requests);
     } catch (err) {
       console.error("Error fetching requests:", err);
@@ -16,8 +18,7 @@ function ManagePermissions() {
 
   const handleApprove = async (requestId) => {
     try {
-      const recordIds = ["123456789"]; 
-      await axios.post("http://localhost:5004/api/permissions/approve-request", { requestId, recordIds });
+      await axios.post("http://localhost:5004/api/permissions/approve-request", { requestId });
       fetchRequests();
     } catch (err) {
       console.error("Error approving request", err);
@@ -48,12 +49,16 @@ function ManagePermissions() {
             <div key={req._id} className="record-card">
               <h3>{req.recordTitle}</h3>
               <p>Doctor: {req.doctorEmail}</p>
-              <button onClick={() => handleApprove(req._id)} className="approve-btn">
-                Approve
-              </button>
-              <button onClick={() => handleRevoke(req._id)} className="revoke-btn">
-                Revoke
-              </button>
+              <p>Status: {req.status}</p>
+              {req.status === "pending" ? (
+                <button onClick={() => handleApprove(req._id)} className="approve-btn">
+                  Approve
+                </button>
+              ) : (
+                <button onClick={() => handleRevoke(req._id)} className="revoke-btn">
+                  Revoke
+                </button>
+              )}
             </div>
           ))
         )}

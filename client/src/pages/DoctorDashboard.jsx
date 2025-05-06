@@ -11,7 +11,7 @@ function DoctorDashboard() {
   const fetchRecords = async () => {
     try {
       const response = await axios.get("http://localhost:5004/api/records/doctor");
-      setRecords(response.data.records); // Only records the doctor has access to
+      setRecords(response.data.records); 
     } catch (error) {
       console.error("Error fetching records:", error);
     }

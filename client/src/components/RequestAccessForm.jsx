@@ -4,15 +4,15 @@ import "../style/RequestAccessForm.css";
 
 function RequestAccessForm() {
   const [patientId, setPatientId] = useState("");
+  const [recordId, setRecordId] = useState("");
   const [message, setMessage] = useState("");
-
-  const handlePatientIdChange = (e) => setPatientId(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5004/api/records/request-access", {
+      const response = await axios.post("http://localhost:5004/api/permissions/request-access", {
         patientId,
+        recordId,
       });
 
       if (response.data.success) {
@@ -35,8 +35,17 @@ function RequestAccessForm() {
           <input
             type="text"
             value={patientId}
-            onChange={handlePatientIdChange}
+            onChange={(e) => setPatientId(e.target.value)}
             placeholder="Enter Patient ID"
+          />
+        </label>
+        <label>
+          Record ID:
+          <input
+            type="text"
+            value={recordId}
+            onChange={(e) => setRecordId(e.target.value)}
+            placeholder="Enter Record ID"
           />
         </label>
         <button type="submit">Request Access</button>
