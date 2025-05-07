@@ -31,7 +31,7 @@ function UploadRecordForm({ onUploadSuccess }) {
         setFiles([]);
         setTitle("");
         setDescription("");
-        if (onUploadSuccess) onUploadSuccess(); // Notify parent
+        if (onUploadSuccess) onUploadSuccess(); 
       } else {
         setMessage("Upload failed.");
       }

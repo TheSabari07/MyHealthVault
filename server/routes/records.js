@@ -16,6 +16,7 @@ const upload = multer({ storage });
 
 const mockAuth = (req, res, next) => {
   req.user = { id: "6635eae898ddab4c48d6baf1" }; 
+  next(); 
 };
 
 

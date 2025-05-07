@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import RecordCard from "../components/RecordCard.jsx";
+import RecordDoc from "../components/RecordDoc.jsx";
 import RequestAccessForm from "../components/RequestAccessForm.jsx";
 import "../style/DoctorDashboard.css";
 
@@ -43,7 +43,7 @@ function DoctorDashboard() {
           <h2>Accessible Records</h2>
           {records.length > 0 ? (
             records.map((record) => (
-              <RecordCard key={record._id} record={record} />
+              <RecordDoc key={record._id} record={record} />
             ))
           ) : (
             <p>No accessible records yet.</p>
