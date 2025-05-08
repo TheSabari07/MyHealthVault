@@ -16,9 +16,12 @@ function DoctorDashboard() {
       console.error("Error fetching records:", error);
     }
   };
-
   useEffect(() => {
-    fetchRecords();
+    fetchRecords(); 
+  
+    const interval = setInterval(fetchRecords, 5000); 
+  
+    return () => clearInterval(interval); 
   }, []);
 
   return (
