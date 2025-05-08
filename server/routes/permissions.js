@@ -6,16 +6,15 @@ import cors from "cors";
 
 const router = express.Router();
 
-// Mock authentication middleware
+
 const mockAuth = (req, res, next) => {
-  // Retrieve user ID from the headers or set a default for testing
   req.user = { id: req.headers['x-user-id'] || "6635eae898ddab4c48d6baf1" };
   next();
 };
 
-router.use(cors()); // Enable CORS
+router.use(cors()); 
 
-// Approve access request
+
 router.post("/approve-request", async (req, res) => {
   const { requestId } = req.body;
 
@@ -25,11 +24,11 @@ router.post("/approve-request", async (req, res) => {
       return res.status(404).json({ success: false, message: "Request not found or already handled." });
     }
 
-    // Change request status to approved
+ 
     request.status = 'approved';
     await request.save();
 
-    // Update permission for the doctor
+   
     const permission = await Permission.findOneAndUpdate(
       { recordId: request.recordId, userId: request.doctorId },
       { accessGranted: true, role: 'doctor' },
@@ -43,7 +42,6 @@ router.post("/approve-request", async (req, res) => {
   }
 });
 
-// Revoke access
 router.post("/revoke", async (req, res) => {
   const { requestId } = req.body;
 
@@ -53,8 +51,11 @@ router.post("/revoke", async (req, res) => {
       return res.status(404).json({ success: false, message: "Request not found" });
     }
 
-    // Remove permission for the doctor
+    
     await Permission.findOneAndDelete({ recordId: request.recordId, userId: request.doctorId });
+
+    
+    await AccessRequest.findByIdAndDelete(requestId);
 
     res.json({ success: true, message: "Access revoked successfully." });
   } catch (err) {
@@ -63,7 +64,8 @@ router.post("/revoke", async (req, res) => {
   }
 });
 
-// Get all access requests for a patient
+
+
 router.get("/requests", mockAuth, async (req, res) => {
   try {
     const patientId = req.user.id;
@@ -72,7 +74,7 @@ router.get("/requests", mockAuth, async (req, res) => {
       return res.status(400).json({ message: "User is not authenticated" });
     }
 
-    // Fetch records for the patient
+    
     const patientRecords = await Record.find({ patientId });
 
     if (!patientRecords.length) {
@@ -81,7 +83,6 @@ router.get("/requests", mockAuth, async (req, res) => {
 
     const recordIds = patientRecords.map((r) => r._id);
 
-    // Fetch requests for the records
     const requests = await AccessRequest.find({ recordId: { $in: recordIds } })
       .populate("doctorId", "email")
       .populate("recordId", "title");
@@ -104,14 +105,13 @@ router.get("/requests", mockAuth, async (req, res) => {
   }
 });
 
-// Request access to a record
+
 router.post("/request-access", mockAuth, async (req, res) => {
   const { patientId, recordId } = req.body;
 
   try {
     const doctorId = req.user.id;
 
-    // Check if there's already a pending request
     const existing = await AccessRequest.findOne({
       doctorId,
       patientId,
