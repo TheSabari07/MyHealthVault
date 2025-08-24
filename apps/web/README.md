@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# My Health Vault - Web Application
 
-## Getting Started
+This is a Next.js web application for managing health information securely.
 
-First, run the development server:
+## Features
+
+- **Authentication**: NextAuth.js with credentials provider
+- **Form Handling**: React Hook Form with Zod validation
+- **UI Components**: shadcn/ui components with Tailwind CSS
+- **TypeScript**: Full TypeScript support
+- **Responsive Design**: Mobile-first responsive design
+
+## Setup Instructions
+
+### 1. Environment Variables
+
+Create a `.env.local` file in the root of the web app with the following variables:
+
+```bash
+# NextAuth Configuration
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-here-change-in-production
+
+# Database (for future use)
+# DATABASE_URL="postgresql://username:password@localhost:5432/healthvault"
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js app directory
+│   ├── api/              # API routes
+│   │   └── auth/         # NextAuth API routes
+│   ├── auth/             # Authentication pages
+│   │   └── signin/       # Sign in page
+│   ├── dashboard/        # Protected dashboard page
+│   ├── globals.css       # Global styles
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Home page
+├── components/            # React components
+│   ├── auth/             # Authentication components
+│   ├── providers/        # Context providers
+│   └── ui/               # shadcn/ui components
+├── lib/                   # Utility functions
+│   ├── auth.ts           # NextAuth configuration
+│   └── utils.ts          # Utility functions
+└── types/                 # TypeScript type definitions
+    └── next-auth.d.ts    # NextAuth type extensions
+```
 
-## Learn More
+## Authentication
 
-To learn more about Next.js, take a look at the following resources:
+The application uses NextAuth.js with a credentials provider. For development purposes, you can use these demo credentials:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Email**: admin@example.com
+- **Password**: password123
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Available Routes
 
-## Deploy on Vercel
+- `/` - Home page with landing content
+- `/auth/signin` - Sign in page
+- `/dashboard` - Protected dashboard (requires authentication)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Development
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Adding New shadcn/ui Components
+
+```bash
+npx shadcn@latest add [component-name]
+```
+
+### Form Validation
+
+Forms use Zod schemas for validation. Example:
+
+```typescript
+import { z } from "zod"
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+})
+
+type FormData = z.infer<typeof formSchema>
+```
+
+### Styling
+
+The application uses Tailwind CSS with shadcn/ui design tokens. CSS variables are defined in `globals.css` for consistent theming.
+
+## Next Steps
+
+1. **Backend Integration**: Connect to your NestJS API
+2. **Database**: Implement proper user authentication and data storage
+3. **Additional Features**: Add health record management, file uploads, etc.
+4. **Production**: Update environment variables and security settings
+
+## Technologies Used
+
+- **Next.js 15** - React framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Component library
+- **NextAuth.js** - Authentication
+- **React Hook Form** - Form handling
+- **Zod** - Schema validation
