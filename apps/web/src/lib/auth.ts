@@ -1,4 +1,4 @@
-import NextAuth from "next-auth"
+import NextAuth, { type NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { z } from "zod"
 
@@ -7,7 +7,7 @@ const loginSchema = z.object({
   password: z.string().min(6),
 })
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -30,14 +30,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           }
           
           return null
-        } catch (error) {
+        } catch {
           return null
         }
       }
     })
   ],
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as const,
   },
   pages: {
     signIn: "/auth/signin",
@@ -56,4 +56,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session
     },
   },
-}) 
+}
+
+export const { auth, signIn, signOut } = NextAuth(authOptions) 

@@ -22,7 +22,7 @@ export default function DashboardPage() {
     )
   }
 
-  if (!session) {
+  if (!session?.user) {
     return null
   }
 
