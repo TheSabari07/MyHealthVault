@@ -25,7 +25,7 @@ export function LoginForm() {
     formState: { errors, isValid },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: "onChange", // Enable real-time validation
+    mode: "onChange",
   })
 
   const onSubmit = async (data: LoginFormData) => {
