@@ -4,6 +4,7 @@ import { useState } from "react"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -30,6 +31,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>
 
 export function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -42,10 +44,18 @@ export function RegisterForm() {
     },
   })
 
-  const onSubmit = async (_values: RegisterFormValues) => {
-    setIsLoading(true)
-    // TODO: Hook up to backend later
-    setTimeout(() => setIsLoading(false), 800)
+  const onSubmit = async (values: RegisterFormValues) => {
+    try {
+      setIsLoading(true)
+      // Log the validated form data
+      console.log("RegisterForm submit:", values)
+      // Simulate async work
+      await new Promise((res) => setTimeout(res, 800))
+      // Redirect after success
+      router.push("/login")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
